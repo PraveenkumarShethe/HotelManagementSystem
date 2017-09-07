@@ -1,0 +1,35 @@
+spring:
+  profiles:
+    active: common,local
+  default: common,local
+---
+#Properties for the "common" profile, Which will contain properties common to all profiles
+spring:
+  profiles: common
+server:
+  contextPath: /HotelManagementSystem
+  port: 9000
+---
+#Properties for the "local" profile, to be used by developers on there Systems
+spring:
+  profiles: local
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: none
+  datasource:
+    driverClassName: org.postgresql.Driver
+    username: HMSUser
+    password: password
+    url: jdbc:postgresql://127.0.0.1:5432/HotelManagementSystem
+logging:
+  file: HotelManagementSystem.log
+  level:
+    org.springframework: DEBUG
+    org.hibernate: DEBUG
+    com.praveen.shethe: DEBUG
+    b.c.e.u.UndertowEmbeddedServletContainer: DEBUG
+
+---
