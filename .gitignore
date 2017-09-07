@@ -23,3 +23,9 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+src/main/resources/application.yml.orig
+*.log.*
+src/integrationtest/
+src/main/java/com/mobile/di/HotelManagementSystem/service/
+src/main/java/com/mobile/di/HotelManagementSystem/validator/
+HotelManagementSystem.log.1
