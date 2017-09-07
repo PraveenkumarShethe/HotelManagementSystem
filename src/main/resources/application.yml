@@ -23,6 +23,16 @@ spring:
     driverClassName: org.postgresql.Driver
     username: HMSUser
     password: password
+    url: jdbc:postgresql://127.0.0.1:5432/HotelManagementSystemDB
+logging:
+  file: HotelManagementSystem.log
+  level:
+    org.springframework: DEBUG
+    org.hibernate: DEBUG
+    com.praveen.shethe: DEBUG
+    b.c.e.u.UndertowEmbeddedServletContainer: DEBUG
+    username: HMSUser
+    password: password
     url: jdbc:postgresql://127.0.0.1:5432/HotelManagementSystem
 logging:
   file: HotelManagementSystem.log
