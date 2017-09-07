@@ -34,10 +34,12 @@ public class HMSWebAppInitializer implements WebApplicationInitializer {
 
     /**
      * Set the config locations for this application context in init-param style,
-     * i.e. with distinct locations separated by commas, semicolons or whitespace.
+     * i.e. with distinct locations separated by commas, semicolons or whitespace,
+     * and also Creates the 'root' Spring application context
      * If not set, the implementation may use a default as appropriate.
      */
     private AnnotationConfigWebApplicationContext getContext() {
+
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
         context.setConfigLocation("com.mobile.di.HotelManagementSystem.config.WebapplicationConfiguration");
         return context;

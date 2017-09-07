@@ -10,7 +10,7 @@ server:
   contextPath: /HotelManagementSystem
   port: 9000
 ---
-#Properties for the "local" profile, to be used by developers on their laptop
+#Properties for the "local" profile, to be used by developers on there Systems
 spring:
   profiles: local
   jpa:
@@ -21,15 +21,25 @@ spring:
       ddl-auto: none
   datasource:
     driverClassName: org.postgresql.Driver
-    username: libraryuser
+    username: HMSUser
     password: password
     url: jdbc:postgresql://127.0.0.1:5432/HotelManagementSystemDB
 logging:
   file: HotelManagementSystem.log
   level:
-    org.springframework: ON
+    org.springframework: DEBUG
     org.hibernate: DEBUG
-    com.praveen.shethe: ON
-    b.c.e.u.UndertowEmbeddedServletContainer: ON
+    com.praveen.shethe: DEBUG
+    b.c.e.u.UndertowEmbeddedServletContainer: DEBUG
+    username: HMSUser
+    password: password
+    url: jdbc:postgresql://127.0.0.1:5432/HotelManagementSystem
+logging:
+  file: HotelManagementSystem.log
+  level:
+    org.springframework: DEBUG
+    org.hibernate: DEBUG
+    com.praveen.shethe: DEBUG
+    b.c.e.u.UndertowEmbeddedServletContainer: DEBUG
 
 ---
