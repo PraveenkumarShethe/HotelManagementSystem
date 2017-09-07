@@ -18,7 +18,7 @@ spring:
     show-sql: true
     generate-ddl: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
   datasource:
     driverClassName: org.postgresql.Driver
     username: HMSUser
@@ -34,12 +34,5 @@ logging:
     username: HMSUser
     password: password
     url: jdbc:postgresql://127.0.0.1:5432/HotelManagementSystem
-logging:
-  file: HotelManagementSystem.log
-  level:
-    org.springframework: DEBUG
-    org.hibernate: DEBUG
-    com.praveen.shethe: DEBUG
-    b.c.e.u.UndertowEmbeddedServletContainer: DEBUG
 
 ---
