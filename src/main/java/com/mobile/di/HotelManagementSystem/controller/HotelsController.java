@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,16 +31,15 @@ public class HotelsController {
     private HotelRepository hotelRepository;
     @Autowired
     private HotelServiceInterface hotelServiceInterface;
-
     @Autowired
     private HotelValidator hotelValidator;
-
     @Autowired
     private RegionRepository regionRepository;
 
     /**
      * @return An iterable of the list of hotels without filter
      * Http.ok will be returned{@code 200 OK}.
+     * Http.NOT_FOUND will be returned if not found {@code 404 Not Found}.
      */
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -52,27 +52,32 @@ public class HotelsController {
      * @param id The record id of the Hotel that will be queried
      * @return THe Hotel object
      * Http.ok will be returned{@code 200 OK}.
+     * Http.NOT_FOUND will be returned if not found {@code 404 Not Found}.
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @Transactional(Transactional.TxType.NEVER)
     public Hotel getHotelById(@PathVariable("id") Long id) {
-        return hotelRepository.findOne(id);
-    }
-
-    // Todo: need to write doc here
-
-    @RequestMapping(value = "/{regionName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    @Transactional(Transactional.TxType.NEVER)
-    public Iterable<Hotel> getHotelByRegion(@PathVariable("regionName") String regionName) {
-        Region region = regionRepository.findByRegionName(regionName);
-        return hotelRepository.findAllByRegion(region);
+        return RestPreconditions.checkFound(hotelRepository.findOne(id));
     }
 
     /**
+     * @param regionName The record regionName of the Hotel that will be queried
+     * @return The Iterable Hotel object
+     * Http.ok will be returned{@code 200 OK}.
+     * Http.NOT_FOUND will be returned if not found {@code 404 Not Found}.
+     */
+    @RequestMapping(value = "/searchByRegionName", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @Transactional(Transactional.TxType.NEVER)
+    public Iterable<Hotel> getHotelByRegion(@RequestParam("regionName") String regionName) {
+        Region region = regionRepository.findByRegionName(regionName);
+        return RestPreconditions.checkFound(hotelRepository.findByRegion(region));
+    }
+    /**
      * Add a new Hotel to the Hotel database.
      * @param hotel The Hotel object to be inserted
+     * {@code 201 Created}.
      */
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)

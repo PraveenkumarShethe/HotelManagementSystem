@@ -13,8 +13,6 @@ import org.springframework.stereotype.Repository;
 @RestResource(exported = false)
 public interface HotelRepository extends CrudRepository<Hotel,Long> {
 
-    Hotel findByRegion(Region region);
-
-    Iterable<Hotel> findAllByRegion(Region region);
+    Iterable<Hotel> findByRegion(Region region);
 
 }
