@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 /**
  * Created by Praveenkumar on 9/7/2017.
+ * RegionRepository Interface for generic CRUD operations on a repository for a specific type.
  */
 @Repository
 @RestResource(exported = false)
