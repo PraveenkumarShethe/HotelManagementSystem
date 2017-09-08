@@ -1,6 +1,8 @@
 package com.mobile.di.HotelManagementSystem.controllerunitestcases;
 
 import com.mobile.di.HotelManagementSystem.controller.HotelsController;
+import com.mobile.di.HotelManagementSystem.controller.RestPreconditions;
+import com.mobile.di.HotelManagementSystem.controller.restexceptionhandler.HMSResourceNotFoundException;
 import com.mobile.di.HotelManagementSystem.model.Hotel;
 import com.mobile.di.HotelManagementSystem.model.Region;
 import com.mobile.di.HotelManagementSystem.repository.HotelRepository;
@@ -15,6 +17,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -33,7 +36,7 @@ public class HotelControllerUnitTestCases {
     private HotelRepository hotelRepository;
 
     @Test
-    public void getAllHoetlMustPass(){
+    public void getAllHoetlMustPass() {
 
         Region region = RegionBuilder
                 .createRegion()
@@ -58,8 +61,6 @@ public class HotelControllerUnitTestCases {
         when(hotelsController.getAllHotels()).thenReturn((Iterable<Hotel>) listOfHotels);
         Iterable<Hotel> hotels = hotelsController.getAllHotels();
         verify(hotelRepository, times(1)).findAll();
-
-
     }
 
     @Before
@@ -68,7 +69,23 @@ public class HotelControllerUnitTestCases {
     }
 
     @Test
-    public void getAllHotelMustPass(){
+    public void getHotelByIdMustPass() throws HMSResourceNotFoundException {
 
+        Region region = RegionBuilder
+                .createRegion()
+                .setRegionName("NORTH_INDIAN")
+                .getRegion();
+        Hotel hotel = HotelBuilder
+                .createHotelBuilder()
+                .setHotelName("Lila Palace")
+                .setHotelAddress("BTM 1st Stage Bangalore")
+                .setHotelRatings(5)
+                .getHotel();
+        when(hotelRepository.findOne(1L)).thenReturn(hotel);
+        when(hotelsController.getHotelById(1L)).thenReturn(hotel);
+        when(RestPreconditions.checkFound(hotelRepository.findOne(1L))).thenReturn(hotel);
+        Hotel hotels = hotelsController.getHotelById(1L);
+        assertNotNull(hotel);
+        verify(hotelRepository, times(1)).findOne(1L);
     }
 }
