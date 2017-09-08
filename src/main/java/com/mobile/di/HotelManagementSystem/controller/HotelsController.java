@@ -107,7 +107,6 @@ public class HotelsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public void updateHotelDetails(@PathVariable("id") Long hotelid, @RequestBody Hotel updateHotel) throws HMSResourceNotFoundException {
-
         Hotel hotel = RestPreconditions.checkFound(hotelRepository.findOne(hotelid));
         hotelServiceInterface.updateHotel(updateHotel, hotel);
     }
