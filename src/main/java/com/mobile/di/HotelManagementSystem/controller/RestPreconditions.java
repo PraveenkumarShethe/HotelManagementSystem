@@ -11,6 +11,14 @@ import java.util.Collection;
  */
 public class RestPreconditions {
 
+    /**
+     * The org.slf4j.Logger interface is the main user entry point of SLF4J API.
+     * It is expected that logging takes place through concrete implementations
+     * of this interface.
+     * Logger is AOP concept and helps in finding bugs and other details of enter points
+     * @param RestPreconditions
+     *
+     */
     private static final Logger logger = LoggerFactory.getLogger(RestPreconditions.class);
 
     public static <T> T checkFound(final T resource) throws IllegalArgumentException {

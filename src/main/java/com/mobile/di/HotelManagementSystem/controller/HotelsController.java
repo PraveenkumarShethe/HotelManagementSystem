@@ -66,6 +66,7 @@ public class HotelsController {
      * @return The Iterable Hotel object
      * Http.ok will be returned{@code 200 OK}.
      * Http.NOT_FOUND will be returned if not found {@code 404 Not Found}.
+     * Http.BAD_REQUEST will be returned if not found {@code 400 Bad Request}.
      */
     @RequestMapping(value = "/searchByRegionName", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -77,7 +78,6 @@ public class HotelsController {
 
     /**
      * Add a new Hotel to the Hotel database.
-     *
      * @param hotel The Hotel object to be inserted
      *              {@code 201 Created}. for creating an object
      *              {@code 400 Bad Request}. for all other requests
@@ -95,4 +95,25 @@ public class HotelsController {
         hotelValidator.validate(hotel);
         hotelServiceInterface.saveHotel(hotel);
     }
+
+    /**
+     * Add a new Hotel to the Hotel database.
+     * @param hotel The Hotel object to be inserted
+     * {@code 205 Reset Content} for Updating an Hotel object
+     * {@code 400 Bad Request} for all other requests
+     */
+    @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public void updateHotelDetails(@RequestBody Hotel hotel) {
+        Iterable<Hotel> duplicateHotel = hotelRepository.findAll();
+        duplicateHotel.forEach(hotel1 -> {
+            if (hotel.getHotelName().equals(hotel.getHotelName())) {
+                throw new IllegalArgumentException("Hotel already exists in the database");
+            }
+        });
+        hotelValidator.validate(hotel);
+        hotelServiceInterface.saveHotel(hotel);
+    }
+
 }
