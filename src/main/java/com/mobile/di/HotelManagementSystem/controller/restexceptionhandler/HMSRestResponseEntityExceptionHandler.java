@@ -40,12 +40,10 @@ public class HMSRestResponseEntityExceptionHandler extends ResponseEntityExcepti
             ConstraintViolationException.class,
             IllegalArgumentException.class,
             DataIntegrityViolationException.class,
-            CertificateException.class,
             EntityNotFoundException.class,
             InvalidDataAccessApiUsageException.class,
             DataAccessException.class,
             NoSuchAlgorithmException.class,
-            KeyStoreException.class,
             IOException.class,
     })
     public final ResponseEntity<Object> handleLibraryException(Exception ex, WebRequest request) {
@@ -62,10 +60,6 @@ public class HMSRestResponseEntityExceptionHandler extends ResponseEntityExcepti
             HttpStatus status = HttpStatus.BAD_REQUEST;
             return handleDataIntegrityViolationException((DataIntegrityViolationException) ex,
                     headers, status, request);
-        } else if (ex instanceof CertificateException) {
-            HttpStatus status = HttpStatus.BAD_REQUEST;
-            return handleCertificateException((CertificateException) ex,
-                    headers, status, request);
         } else if (ex instanceof EntityNotFoundException) {
             HttpStatus status = HttpStatus.NOT_FOUND;
             return handleEntityNotFoundException((EntityNotFoundException) ex,
@@ -79,9 +73,6 @@ public class HMSRestResponseEntityExceptionHandler extends ResponseEntityExcepti
         } else if (ex instanceof NoSuchAlgorithmException) {
             HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
             return handleNoSuchAlgorithmException((NoSuchAlgorithmException) ex, headers, status, request);
-        } else if (ex instanceof KeyStoreException) {
-            HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-            return handleKeyStoreException((KeyStoreException) ex, headers, status, request);
         } else if (ex instanceof IOException) {
             HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
             return handleIOException((IOException) ex, headers, status, request);
@@ -122,14 +113,6 @@ public class HMSRestResponseEntityExceptionHandler extends ResponseEntityExcepti
         return handleExceptionInternal(ex, bodyOfResponse, headers, status, request);
     }
 
-    private ResponseEntity<Object> handleCertificateException(final CertificateException ex,
-                                                              HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ErrorResponse bodyOfResponse = new ErrorResponse()
-                .setErrorTitle("Error while processing the certificate")
-                .setException(ex);
-        return handleExceptionInternal(ex, bodyOfResponse, headers, status, request);
-    }
-
     private ResponseEntity<Object> handleEntityNotFoundException(final EntityNotFoundException ex,
                                                                  HttpHeaders headers, HttpStatus status, WebRequest request) {
         ErrorResponse bodyOfResponse = new ErrorResponse()
@@ -161,17 +144,6 @@ public class HMSRestResponseEntityExceptionHandler extends ResponseEntityExcepti
                                                                   HttpHeaders headers, HttpStatus status, WebRequest request) {
         ErrorResponse bodyOfResponse = new ErrorResponse()
                 .setErrorTitle("This certificate uses an algorithm unknown to the server.")
-                .setException(ex);
-        return handleExceptionInternal(ex, bodyOfResponse, headers, status, request);
-    }
-
-    /**
-     * {@code 500 Internal Server Error}.
-     */
-    private ResponseEntity<Object> handleKeyStoreException(final KeyStoreException ex,
-                                                           HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ErrorResponse bodyOfResponse = new ErrorResponse()
-                .setErrorTitle("An internal server error encountered.")
                 .setException(ex);
         return handleExceptionInternal(ex, bodyOfResponse, headers, status, request);
     }
