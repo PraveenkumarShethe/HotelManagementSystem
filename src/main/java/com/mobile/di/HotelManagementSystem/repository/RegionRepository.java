@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @RestResource(exported = false)
-public interface RegionRepository extends CrudRepository<Region,Long> {
+public interface RegionRepository extends CrudRepository<Region, Long> {
 
     Region findByRegionName(String regionName);
 

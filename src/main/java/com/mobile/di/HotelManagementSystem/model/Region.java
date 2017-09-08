@@ -2,8 +2,6 @@ package com.mobile.di.HotelManagementSystem.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
 
