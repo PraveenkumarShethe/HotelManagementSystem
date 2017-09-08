@@ -28,7 +28,7 @@ public class RestPreconditions {
                 && ((Collection) resource).isEmpty())
                 || (resource instanceof Iterable
                 && !((Iterable) resource).iterator().hasNext())) {
-            throw new IllegalArgumentException();
+            throw new HMSResourceNotFoundException();
         }
         return resource;
     }
