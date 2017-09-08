@@ -1,5 +1,6 @@
 package com.mobile.di.HotelManagementSystem.controller;
 
+import com.mobile.di.HotelManagementSystem.controller.restexceptionhandler.HMSResourceNotFoundException;
 import com.mobile.di.HotelManagementSystem.model.Hotel;
 import com.mobile.di.HotelManagementSystem.model.Region;
 import com.mobile.di.HotelManagementSystem.repository.HotelRepository;
@@ -57,7 +58,7 @@ public class HotelsController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @Transactional(Transactional.TxType.NEVER)
-    public Hotel getHotelById(@PathVariable("id") Long id) {
+    public Hotel getHotelById(@PathVariable("id") Long id) throws HMSResourceNotFoundException {
         return RestPreconditions.checkFound(hotelRepository.findOne(id));
     }
 
@@ -71,7 +72,7 @@ public class HotelsController {
     @RequestMapping(value = "/searchByRegionName", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @Transactional(Transactional.TxType.NEVER)
-    public Iterable<Hotel> getHotelByRegion(@RequestParam("regionName") String regionName) {
+    public Iterable<Hotel> getHotelByRegion(@RequestParam("regionName") String regionName) throws HMSResourceNotFoundException {
         Region region = regionRepository.findByRegionName(regionName);
         return RestPreconditions.checkFound(hotelRepository.findByRegion(region));
     }
@@ -98,22 +99,17 @@ public class HotelsController {
 
     /**
      * Add a new Hotel to the Hotel database.
-     * @param hotel The Hotel object to be inserted
+     * @param updateHotel The Hotel object to be inserted
      * {@code 205 Reset Content} for Updating an Hotel object
-     * {@code 400 Bad Request} for all other requests
+     * {@code 400 Bad Request} for all other requests eg. JSON mismatch like wise
      */
-    @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional(Transactional.TxType.REQUIRES_NEW)
-    public void updateHotelDetails(@RequestBody Hotel hotel) {
-        Iterable<Hotel> duplicateHotel = hotelRepository.findAll();
-        duplicateHotel.forEach(hotel1 -> {
-            if (hotel.getHotelName().equals(hotel.getHotelName())) {
-                throw new IllegalArgumentException("Hotel already exists in the database");
-            }
-        });
-        hotelValidator.validate(hotel);
-        hotelServiceInterface.saveHotel(hotel);
+    public void updateHotelDetails(@PathVariable("id") Long hotelid, @RequestBody Hotel updateHotel) throws HMSResourceNotFoundException {
+
+        Hotel hotel = RestPreconditions.checkFound(hotelRepository.findOne(hotelid));
+        hotelServiceInterface.updateHotel(updateHotel, hotel);
     }
 
 }
