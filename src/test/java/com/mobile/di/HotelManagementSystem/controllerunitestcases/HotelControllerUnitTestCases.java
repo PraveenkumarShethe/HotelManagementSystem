@@ -6,6 +6,7 @@ import com.mobile.di.HotelManagementSystem.controller.restexceptionhandler.HMSRe
 import com.mobile.di.HotelManagementSystem.model.Hotel;
 import com.mobile.di.HotelManagementSystem.model.Region;
 import com.mobile.di.HotelManagementSystem.repository.HotelRepository;
+import com.mobile.di.HotelManagementSystem.repository.RegionRepository;
 import com.mobile.di.HotelManagementSystem.utilities.HotelBuilder;
 import com.mobile.di.HotelManagementSystem.utilities.RegionBuilder;
 import com.mobile.di.HotelManagementSystem.validator.HotelValidator;
@@ -34,6 +35,8 @@ public class HotelControllerUnitTestCases {
     private HotelValidator hotelValidator;
     @Mock
     private HotelRepository hotelRepository;
+    @Mock
+    private RegionRepository regionRepository;
 
     @Test
     public void getAllHoetlMustPass() {
@@ -87,5 +90,62 @@ public class HotelControllerUnitTestCases {
         Hotel hotels = hotelsController.getHotelById(1L);
         assertNotNull(hotel);
         verify(hotelRepository, times(1)).findOne(1L);
+    }
+
+    @Test
+    public void getHotelByRegionPass() throws HMSResourceNotFoundException {
+
+        Region region = RegionBuilder
+                .createRegion()
+                .setRegionName("NORTH_INDIAN")
+                .getRegion();
+
+        Region region1 = RegionBuilder
+                .createRegion()
+                .setRegionName("SOUTH_INDIAN")
+                .getRegion();
+
+        Hotel hotel = HotelBuilder
+                .createHotelBuilder()
+                .setHotelName("Lila Palace")
+                .setHotelAddress("BTM 1st Stage Bangalore")
+                .setRegion(region)
+                .setHotelRatings(5)
+                .getHotel();
+
+        Hotel hotel1 = HotelBuilder
+                .createHotelBuilder()
+                .setHotelName("Lila Palace")
+                .setHotelAddress("BTM 1st Stage Bangalore")
+                .setHotelRatings(5)
+                .setRegion(region)
+                .getHotel();
+
+        Hotel hotel2 = HotelBuilder
+                .createHotelBuilder()
+                .setHotelName("Army Hotel")
+                .setHotelAddress("BTM 2st Stage Bangalore")
+                .setRegion(region1)
+                .setHotelRatings(5)
+                .getHotel();
+
+        Hotel hotel3 = HotelBuilder
+                .createHotelBuilder()
+                .setHotelName("Surya Hotel")
+                .setHotelAddress("BTM 2st Stage Bangalore")
+                .setRegion(region1)
+                .setHotelRatings(5)
+                .getHotel();
+
+        ArrayList<Hotel> hotelArrayList = new ArrayList<>();
+        hotelArrayList.add(hotel);
+        hotelArrayList.add(hotel1);
+        when(regionRepository.findByRegionName("NORTH_INDIAN")).thenReturn(region);
+        when(hotelRepository.findByRegion(region)).thenReturn(hotelArrayList);
+        when(hotelsController.getHotelByRegion("NORTH_INDIAN")).thenReturn((Iterable<Hotel>) hotelArrayList);
+        when(RestPreconditions.checkFound(hotelRepository.findByRegion(region))).thenReturn(hotelArrayList);
+        Iterable<Hotel> hotelsIterable = hotelsController.getHotelByRegion("NORTH_INDIAN");
+        assertNotNull(hotelsIterable);
+        verify(hotelRepository, times(1)).findByRegion(region);
     }
 }

@@ -80,8 +80,8 @@ public class HotelsController {
     /**
      * Add a new Hotel to the Hotel database.
      * @param hotel The Hotel object to be inserted
-     *              {@code 201 Created}. for creating an object
-     *              {@code 400 Bad Request}. for all other requests
+     * {@code 201 Created}. for creating an object
+     * {@code 400 Bad Request}. for all other requests
      */
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
