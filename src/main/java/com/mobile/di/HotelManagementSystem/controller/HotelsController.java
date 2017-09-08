@@ -74,10 +74,13 @@ public class HotelsController {
         Region region = regionRepository.findByRegionName(regionName);
         return RestPreconditions.checkFound(hotelRepository.findByRegion(region));
     }
+
     /**
      * Add a new Hotel to the Hotel database.
+     *
      * @param hotel The Hotel object to be inserted
-     * {@code 201 Created}.
+     *              {@code 201 Created}. for creating an object
+     *              {@code 400 Bad Request}. for all other requests
      */
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
@@ -85,7 +88,7 @@ public class HotelsController {
     public void insertNewHotel(@RequestBody Hotel hotel) {
         Iterable<Hotel> duplicateHotel = hotelRepository.findAll();
         duplicateHotel.forEach(hotel1 -> {
-            if (hotel.getHotelName().equals(hotel.getHotelName())){
+            if (hotel.getHotelName().equals(hotel.getHotelName())) {
                 throw new IllegalArgumentException("Hotel already exists in the database");
             }
         });
