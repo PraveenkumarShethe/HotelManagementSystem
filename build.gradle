@@ -13,7 +13,6 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath 'io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE'
-        classpath("se.transmode.gradle:gradle-docker:1.2")
     }
 }
 
@@ -25,8 +24,7 @@ apply plugin: 'jacoco'
 apply plugin: 'maven'
 
 jar {
-    baseName = 'Library'
-    version = '0.0.1-SNAPSHOT'
+    baseName = 'HotelManagementSystem'
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -56,6 +54,7 @@ dependencies {
     compile("org.hsqldb:hsqldb")
     compile("org.postgresql:postgresql:9.4-1204-jdbc42")
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 // Integration Testing
 sourceSets {
