@@ -59,4 +59,28 @@ public class Hotel extends AbstractEntity {
     public void setRegion(Region region) {
         this.region = region;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Hotel hotel = (Hotel) o;
+
+        if (hotelRatings != hotel.hotelRatings) return false;
+        if (!hotelName.equals(hotel.hotelName)) return false;
+        if (!hotelAddress.equals(hotel.hotelAddress)) return false;
+        return region.equals(hotel.region);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + hotelName.hashCode();
+        result = 31 * result + hotelAddress.hashCode();
+        result = 31 * result + hotelRatings;
+        result = 31 * result + region.hashCode();
+        return result;
+    }
 }

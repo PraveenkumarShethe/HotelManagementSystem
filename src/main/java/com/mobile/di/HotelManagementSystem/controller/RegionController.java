@@ -27,6 +27,7 @@ public class RegionController {
     /**
      * @return An iterable of the list of Region without filter
      * Http.ok will be returned{@code 200 OK}.
+     * Http.NOT_FOUND will be returned if not found {@code 404 Not Found}.
      */
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -40,6 +41,7 @@ public class RegionController {
      * @param id The record id of the Region that will be queried
      * @return THe Region object
      * Http.ok will be returned{@code 200 OK}.
+     * Http.NOT_FOUND will be returned if not found {@code 404 Not Found}.
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
